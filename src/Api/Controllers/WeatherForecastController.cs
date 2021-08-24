@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -23,6 +22,10 @@ namespace UnifesoPoo.Pedido.Api.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Obtém uma lista de previsões de tempo.
+        /// </summary>
+        /// <returns>Retorna uma lista de <see ref="WeatherForecast">objetos de tempo</see></returns>
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

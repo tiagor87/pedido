@@ -4,6 +4,9 @@ namespace UnifesoPoo.Pedido.Api
 {
     public class WeatherForecast
     {
+        /// <summary>
+        /// The date.
+        /// </summary>
         public DateTime Date { get; set; }
 
         public int TemperatureC { get; set; }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +32,8 @@ namespace UnifesoPoo.Pedido.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "UnifesoPoo.Pedido.Api", Version = "v1" });
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "UnifesoPoo.Pedido.Api.xml");
+                c.IncludeXmlComments(filePath);
             });
         }
 

@@ -35,3 +35,6 @@ git clone https://github.com/unifeso-poo/pedido
 dotnet dev-certs https --trust
 ```
 
+## Para criar os itens necessários para rodar o projeto
+
+## Para rodar em debug
