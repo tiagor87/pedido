@@ -35,6 +35,19 @@ git clone https://github.com/unifeso-poo/pedido
 dotnet dev-certs https --trust
 ```
 
+## Para criar o projeto do zero:
+
+1. dotnet new sln -n <Nome do projeto>
+2. dotnet new <tipo (webapi, console, classlib)> -n <Nome do projeto> -o <Diretório do projeto (src\Api, src\Console)>
+3. dotnet sln add src\Api\Api.csproj
+4. Abrir projeto e ser feliz :tada:
+
 ## Para criar os itens necessários para rodar o projeto
 
+1. Pressionar **F1**
+2. Digitar ```.NET: Generate Assets for Build and Debug```
+
 ## Para rodar em debug
+
+1. Pressionar **F5** para iniciar
+2. Pressionar **Shift + F5** para parar
