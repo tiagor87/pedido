@@ -6,6 +6,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using UnifesoPoo.Pedido.Api.Controllers.Parsers;
+using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices;
+using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
+using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Parsers;
+using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities;
+using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Repositories;
+using UnifesoPoo.Pedido.Api.Core.Infrastructure.ProductAgg.Repositories;
 
 namespace UnifesoPoo.Pedido.Api
 {
@@ -29,6 +36,10 @@ namespace UnifesoPoo.Pedido.Api
                 var filePath = Path.Combine(System.AppContext.BaseDirectory, "UnifesoPoo.Pedido.Api.xml");
                 c.IncludeXmlComments(filePath);
             });
+
+            services.AddSingleton<IProdutoRepositorio, ProdutoRepositorio>();
+            services.AddTransient<ProdutoAppService>();
+            services.AddSingleton<IParser<Produto, IProdutoView>, ProdutoParser>();
             
             services.AddAuthentication(options =>
             {

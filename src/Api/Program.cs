@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities;
 
 namespace UnifesoPoo.Pedido.Api
 {
