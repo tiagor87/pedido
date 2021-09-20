@@ -17,8 +17,9 @@ namespace UnifesoPoo.Pedido.Api.Core.Infrastructure.ProductAgg.Repositories
 
         public ICollection<Produto> BuscarPeloNome(string nome)
         {
-            return _produtos.Where(produto => produto.Nome.Contains(nome, StringComparison.OrdinalIgnoreCase))
-                .ToImmutableList();
+            return _produtos.ToImmutableList();
+            /*return _produtos.Where(produto => produto.Nome.Contains(nome, StringComparison.OrdinalIgnoreCase))
+                .ToImmutableList();*/
         }
     }
 }

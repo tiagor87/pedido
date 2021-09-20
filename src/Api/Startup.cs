@@ -28,7 +28,17 @@ namespace UnifesoPoo.Pedido.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors(options =>
+            {
+                options.AddPolicy("all", builder =>
+                {
+                    builder
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin();
+                });
+            });
+                
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -62,6 +72,8 @@ namespace UnifesoPoo.Pedido.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "UnifesoPoo.Pedido.Api v1"));
             }
 
+            app.UseCors("all");
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();

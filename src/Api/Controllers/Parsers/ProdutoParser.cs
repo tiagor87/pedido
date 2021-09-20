@@ -11,6 +11,7 @@ namespace UnifesoPoo.Pedido.Api.Controllers.Parsers
         {
             return new ProdutoDto
             {
+                Id = produto.Id,
                 Nome = produto.Nome,
                 Preco = (produto.Preco / 100M).ToString("C"),
                 QuantidadeDisponivel = produto.QuantidadeDisponivel
