@@ -7,12 +7,26 @@ namespace UnifesoPoo.Pedido.Api.Controllers.Parsers
 {
     public class ProdutoParser : IParser<Produto, IProdutoView>
     {
-        public IProdutoView Parse(Produto produto) 
+        public IProdutoView Parse(Produto produto)
         {
             return new ProdutoDto
             {
-                Id = produto.Id,
-                Nome = produto.Nome,
+                Id = produto.ExternalId,
+                Nome = produto.Nome, 
+                Preco = produto.Preco.ToString(),
+                QuantidadeDisponivel = produto.QuantidadeDisponivel
+            };
+        }
+    }
+    
+    public class ProdutoReportParser : IParser<Produto, IProdutoView>
+    {
+        public IProdutoView Parse(Produto produto)
+        {
+            return new ProdutoDto
+            {
+                Id = produto.ExternalId,
+                Nome = produto.Nome.ToUpper(), 
                 Preco = (produto.Preco / 100M).ToString("C"),
                 QuantidadeDisponivel = produto.QuantidadeDisponivel
             };

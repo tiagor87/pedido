@@ -2,6 +2,7 @@ using System.IO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +13,9 @@ using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Parsers;
 using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities;
 using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Repositories;
+using UnifesoPoo.Pedido.Api.Core.Domain.Shared.Repositories;
 using UnifesoPoo.Pedido.Api.Core.Infrastructure.ProductAgg.Repositories;
+using UnifesoPoo.Pedido.Api.Core.Infrastructure.Shared;
 
 namespace UnifesoPoo.Pedido.Api
 {
@@ -47,9 +50,16 @@ namespace UnifesoPoo.Pedido.Api
                 c.IncludeXmlComments(filePath);
             });
 
-            services.AddSingleton<IProdutoRepositorio, ProdutoRepositorio>();
-            services.AddTransient<ProdutoAppService>();
-            services.AddSingleton<IParser<Produto, IProdutoView>, ProdutoParser>();
+            services.AddDbContext<PedidoDbContext>(options =>
+            {
+                options
+                    .UseSqlite(Configuration.GetConnectionString("Sqlite"));
+            });
+
+            services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
+            services.AddScoped<ProdutoAppService>();
+            services.AddSingleton<IProdutoParseFactory, ProdutoParseFactory>();
+            services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<PedidoDbContext>());
             
             services.AddAuthentication(options =>
             {
@@ -63,10 +73,12 @@ namespace UnifesoPoo.Pedido.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, PedidoDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
+                dbContext.Database.EnsureCreated();
+                dbContext.Database.Migrate();
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "UnifesoPoo.Pedido.Api v1"));

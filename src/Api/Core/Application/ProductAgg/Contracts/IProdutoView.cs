@@ -2,7 +2,7 @@
 {
     public interface IProdutoView
     {
-        long Id { get; }
+        string Id { get; }
         string Nome { get; }
         string Preco { get; }
         int QuantidadeDisponivel { get; }

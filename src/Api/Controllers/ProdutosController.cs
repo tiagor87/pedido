@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using UnifesoPoo.Pedido.Api.Controllers.Contracts;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices;
+using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
 
 namespace UnifesoPoo.Pedido.Api.Controllers
 {
@@ -30,12 +31,6 @@ namespace UnifesoPoo.Pedido.Api.Controllers
             return Ok(produtos);
         }
         
-        [HttpGet("{id}")]
-        public IActionResult GetById(long id)
-        {
-            var produtos = _appService.BuscarPeloNome(null);
-            return Ok(produtos.First(x => x.Id == id));
-        }
         
     }
 }

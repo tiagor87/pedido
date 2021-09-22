@@ -1,21 +1,24 @@
-﻿using Microsoft.AspNetCore.Server.IIS.Core;
+﻿using System;
 
 namespace UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities
 {
     public class Produto
     {
-        private static long _id = 0;
-        public Produto(string nome, long preco)
+        private Produto()
         {
-            Id = ++_id;
+        }
+        public Produto(string nome, long preco) : this()
+        {
+            ExternalId = Guid.NewGuid().ToString();
             Nome = nome;
             Preco = preco;
             QuantidadeDisponivel = 0;
         }
 
-        public long Id { get; }
-        public string Nome { get; }
-        public int QuantidadeDisponivel { get; }
-        public long Preco { get; }
+        public long Id { get; private set; }
+        public string ExternalId { get; private set; }
+        public string Nome { get; private set; }
+        public int QuantidadeDisponivel { get; private set; }
+        public long Preco { get; private set; }
     }
 }
