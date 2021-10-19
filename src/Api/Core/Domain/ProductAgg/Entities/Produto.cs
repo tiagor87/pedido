@@ -14,12 +14,14 @@ namespace UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities
             Nome = nome;
             Preco = preco;
             QuantidadeDisponivel = 0;
+            Status = "Ativo";
         }
 
         public long Id { get; private set; }
         public string ExternalId { get; private set; }
         public string Nome { get; private set; }
         public int QuantidadeDisponivel { get; private set; }
+        public string Status { get; private set; }
         public long Preco { get; private set; }
 
         public void Atualizar(IAtualizarProduto atualizarProduto)
@@ -27,6 +29,11 @@ namespace UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities
             Nome = atualizarProduto.Nome;
             Preco = atualizarProduto.Preco;
             QuantidadeDisponivel = atualizarProduto.QuantidadeDisponivel;
+        }
+
+        internal void Deletar()
+        {
+            Status = "Inativo";
         }
     }
 }
