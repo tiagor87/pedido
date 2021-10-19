@@ -39,20 +39,22 @@ namespace UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices
         public ICollection<IProdutoView> BuscarPeloNome(string nome)
         {
             var produtos = _repositorio.BuscarPeloNome(nome);
-
-            /*
-            var result = new List<IProdutoView>();
-            for (int i = 0; i < produtos.Count; i++)
-            {
-                var produto = produtos.ElementAt(i);
-                var dto = _parser.Parse(produto);
-                result.Add(dto);
-            }
-
-            return result;
-            */
             
             return produtos.Select(_parseFactory.GetProdutoReportParse().Parse).ToImmutableList();
+        }
+
+        public IProdutoView ObterPeloId(string id)
+        {
+            var produto = _repositorio.ObterPeloId(id);
+            return _parseFactory.GetProdutoParse().Parse(produto);
+        }
+
+        public IProdutoView Atualizar(string id, IAtualizarProduto atualizarProduto)
+        {
+            var produto = _repositorio.ObterPeloId(id);
+            produto.Atualizar(atualizarProduto);
+            _unitOfWork.SaveChanges();
+            return _parseFactory.GetProdutoParse().Parse(produto);
         }
     }
 }

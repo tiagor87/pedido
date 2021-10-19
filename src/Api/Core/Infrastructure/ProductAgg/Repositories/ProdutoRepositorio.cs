@@ -32,5 +32,10 @@ namespace UnifesoPoo.Pedido.Api.Core.Infrastructure.ProductAgg.Repositories
                 .Where(produto => produto.Nome.Contains(nome, StringComparison.OrdinalIgnoreCase))
                 .ToImmutableList();
         }
+
+        public Produto ObterPeloId(string id)
+        {
+            return _context.Set<Produto>().FirstOrDefault(x => x.ExternalId == id);
+        }
     }
 }

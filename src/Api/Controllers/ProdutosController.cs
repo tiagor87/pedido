@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UnifesoPoo.Pedido.Api.Controllers.Contracts;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices;
-using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
 
 namespace UnifesoPoo.Pedido.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("v1/[controller]")]
     public class ProdutosController : ControllerBase
     {
         private readonly ProdutoAppService _appService;
@@ -28,7 +26,30 @@ namespace UnifesoPoo.Pedido.Api.Controllers
         public IActionResult Query(string nome)
         {
             var produtos = _appService.BuscarPeloNome(nome);
-            return Ok(produtos);
+            return Ok(new
+            {
+                data = produtos
+            });
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(string id)
+        {
+            var produto = _appService.ObterPeloId(id);
+            return Ok(new
+            {
+                data = produto
+            });
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Atualizar(string id, AtualizarProdutoDto atualizarProduto)
+        {
+            var produto = _appService.Atualizar(id, atualizarProduto);
+            return Ok(new
+            {
+                data = produto
+            });
         }
         
         

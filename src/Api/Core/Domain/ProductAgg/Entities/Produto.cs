@@ -1,4 +1,5 @@
 ﻿using System;
+using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
 
 namespace UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities
 {
@@ -20,5 +21,12 @@ namespace UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities
         public string Nome { get; private set; }
         public int QuantidadeDisponivel { get; private set; }
         public long Preco { get; private set; }
+
+        public void Atualizar(IAtualizarProduto atualizarProduto)
+        {
+            Nome = atualizarProduto.Nome;
+            Preco = atualizarProduto.Preco;
+            QuantidadeDisponivel = atualizarProduto.QuantidadeDisponivel;
+        }
     }
 }

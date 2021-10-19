@@ -7,5 +7,6 @@ namespace UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Repositories
     {
         void Adicionar(Produto produto);
         ICollection<Produto> BuscarPeloNome(string nome);
+        Produto ObterPeloId(string id);
     }
 }
