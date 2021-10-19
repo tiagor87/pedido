@@ -24,22 +24,22 @@ namespace UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices
             _parseFactory = parseFactory;
             _unitOfWork = unitOfWork;
         }
-        
+
         public IProdutoView Adicionar(IAdicionarProduto adicionarProduto)
         {
             var produto = new Produto(adicionarProduto.Nome, adicionarProduto.Preco);
-            
+
             _repositorio.Adicionar(produto);
-            
+
             _unitOfWork.SaveChanges();
-            
+
             return _parseFactory.GetProdutoParse().Parse(produto);
         }
 
         public ICollection<IProdutoView> BuscarPeloNome(string nome)
         {
             var produtos = _repositorio.BuscarPeloNome(nome);
-            
+
             return produtos.Select(_parseFactory.GetProdutoReportParse().Parse).ToImmutableList();
         }
 
@@ -55,6 +55,13 @@ namespace UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices
             produto.Atualizar(atualizarProduto);
             _unitOfWork.SaveChanges();
             return _parseFactory.GetProdutoParse().Parse(produto);
+        }
+
+        public void Deletar(string id)
+        {
+            var produto = _repositorio.ObterPeloId(id);
+            produto.Deletar();
+            _unitOfWork.SaveChanges();
         }
     }
 }

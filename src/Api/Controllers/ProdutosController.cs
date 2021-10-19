@@ -14,7 +14,7 @@ namespace UnifesoPoo.Pedido.Api.Controllers
         {
             _appService = appService;
         }
-        
+
         [HttpPost]
         public IActionResult Add(AdicionarProdutoDto adicionarProdutoDto)
         {
@@ -51,7 +51,14 @@ namespace UnifesoPoo.Pedido.Api.Controllers
                 data = produto
             });
         }
-        
-        
+
+        [HttpDelete("{id}")]
+
+        public IActionResult Deletar(string id)
+        {
+            _appService.Deletar(id);
+            return NoContent();
+        }
+
     }
 }

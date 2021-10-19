@@ -9,5 +9,6 @@ namespace UnifesoPoo.Pedido.Api.Controllers.Contracts
         public string Preco { get; set; }
         public int QuantidadeDisponivel { get; set; }
         public int QuantidadeEmEstoque { get; set; }
+        public string Status { get; set; }
     }
 }

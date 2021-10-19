@@ -6,5 +6,6 @@
         string Nome { get; }
         string Preco { get; }
         int QuantidadeDisponivel { get; }
+        string Status { get; }
     }
 }

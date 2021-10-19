@@ -12,13 +12,14 @@ namespace UnifesoPoo.Pedido.Api.Controllers.Parsers
             return new ProdutoDto
             {
                 Id = produto.ExternalId,
-                Nome = produto.Nome, 
+                Nome = produto.Nome,
                 Preco = produto.Preco.ToString(),
-                QuantidadeDisponivel = produto.QuantidadeDisponivel
+                QuantidadeDisponivel = produto.QuantidadeDisponivel,
+                Status = produto.Status
             };
         }
     }
-    
+
     public class ProdutoReportParser : IParser<Produto, IProdutoView>
     {
         public IProdutoView Parse(Produto produto)
@@ -26,9 +27,10 @@ namespace UnifesoPoo.Pedido.Api.Controllers.Parsers
             return new ProdutoDto
             {
                 Id = produto.ExternalId,
-                Nome = produto.Nome.ToUpper(), 
+                Nome = produto.Nome.ToUpper(),
                 Preco = (produto.Preco / 100M).ToString("C"),
-                QuantidadeDisponivel = produto.QuantidadeDisponivel
+                QuantidadeDisponivel = produto.QuantidadeDisponivel,
+                Status = produto.Status
             };
         }
     }
