@@ -1,5 +1,4 @@
-﻿using UnifesoPoo.Pedido.Api.Controllers.Contracts;
-using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
+﻿using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
 using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities;
 
 namespace UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Parsers

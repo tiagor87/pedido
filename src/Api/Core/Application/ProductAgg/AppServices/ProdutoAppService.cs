@@ -3,6 +3,8 @@ using System.Collections.Immutable;
 using System.Linq;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Parsers;
+using UnifesoPoo.Pedido.Api.Core.Domain.EstoqueAgg.Entities;
+using UnifesoPoo.Pedido.Api.Core.Domain.EstoqueAgg.Repositories;
 using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities;
 using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Repositories;
 using UnifesoPoo.Pedido.Api.Core.Domain.Shared.Repositories;
@@ -36,9 +38,9 @@ namespace UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices
             return _parseFactory.GetProdutoParse().Parse(produto);
         }
 
-        public ICollection<IProdutoView> BuscarPeloNome(string nome)
+        public ICollection<IProdutoView> Buscar(string nome)
         {
-            var produtos = _repositorio.BuscarPeloNome(nome);
+            var produtos = _repositorio.Buscar(nome);
 
             return produtos.Select(_parseFactory.GetProdutoReportParse().Parse).ToImmutableList();
         }

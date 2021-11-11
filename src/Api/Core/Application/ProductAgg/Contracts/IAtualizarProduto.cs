@@ -3,7 +3,6 @@
     public interface IAtualizarProduto
     {
         string Nome { get; }
-        int QuantidadeDisponivel { get; }
         long Preco { get; }
     }
 }

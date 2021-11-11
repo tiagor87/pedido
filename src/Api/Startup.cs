@@ -1,4 +1,6 @@
 using System.IO;
+using System.Reflection;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,9 +13,11 @@ using UnifesoPoo.Pedido.Api.Controllers.Parsers;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Parsers;
+using UnifesoPoo.Pedido.Api.Core.Domain.EstoqueAgg.Repositories;
 using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities;
 using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Repositories;
 using UnifesoPoo.Pedido.Api.Core.Domain.Shared.Repositories;
+using UnifesoPoo.Pedido.Api.Core.Infrastructure.EstoqueAgg.Repositories;
 using UnifesoPoo.Pedido.Api.Core.Infrastructure.ProductAgg.Repositories;
 using UnifesoPoo.Pedido.Api.Core.Infrastructure.Shared;
 
@@ -57,9 +61,12 @@ namespace UnifesoPoo.Pedido.Api
             });
 
             services.AddScoped<IProdutoRepositorio, ProdutoRepositorio>();
+            services.AddScoped<IEstoqueRepository, EstoqueRepository>();
             services.AddScoped<ProdutoAppService>();
-            services.AddSingleton<IProdutoParseFactory, ProdutoParseFactory>();
+            services.AddScoped<ProdutoReportParser>();
+            services.AddScoped<IProdutoParseFactory, ProdutoParseFactory>();
             services.AddScoped<IUnitOfWork>(provider => provider.GetRequiredService<PedidoDbContext>());
+            services.AddMediatR(Assembly.GetEntryAssembly());
             
             services.AddAuthentication(options =>
             {

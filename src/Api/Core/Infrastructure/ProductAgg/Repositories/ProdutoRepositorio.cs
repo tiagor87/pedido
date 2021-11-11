@@ -22,15 +22,16 @@ namespace UnifesoPoo.Pedido.Api.Core.Infrastructure.ProductAgg.Repositories
             _context.Set<Produto>().Add(produto);
         }
 
-        public ICollection<Produto> BuscarPeloNome(string nome)
+        public ICollection<Produto> Buscar(string nome)
         {
-            if (string.IsNullOrWhiteSpace(nome))
+            var query = _context.Set<Produto>().AsQueryable();
+            
+            if (!string.IsNullOrWhiteSpace(nome))
             {
-                return _context.Set<Produto>().ToImmutableList();
+                query = query.Where(produto => produto.Nome.Contains(nome, StringComparison.OrdinalIgnoreCase));
             }
-            return _context.Set<Produto>()
-                .Where(produto => produto.Nome.Contains(nome, StringComparison.OrdinalIgnoreCase))
-                .ToImmutableList();
+
+            return query.ToImmutableList();
         }
 
         public Produto ObterPeloId(string id)

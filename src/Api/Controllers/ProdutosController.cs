@@ -25,7 +25,7 @@ namespace UnifesoPoo.Pedido.Api.Controllers
         [HttpGet]
         public IActionResult Query(string nome)
         {
-            var produtos = _appService.BuscarPeloNome(nome);
+            var produtos = _appService.Buscar(nome);
             return Ok(new
             {
                 data = produtos

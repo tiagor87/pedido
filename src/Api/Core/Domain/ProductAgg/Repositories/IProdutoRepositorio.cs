@@ -6,7 +6,7 @@ namespace UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Repositories
     public interface IProdutoRepositorio
     {
         void Adicionar(Produto produto);
-        ICollection<Produto> BuscarPeloNome(string nome);
+        ICollection<Produto> Buscar(string nome);
         Produto ObterPeloId(string id);
     }
 }

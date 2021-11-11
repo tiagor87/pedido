@@ -6,6 +6,13 @@ namespace UnifesoPoo.Pedido.Api.Controllers.Parsers
 {
     public class ProdutoParseFactory : IProdutoParseFactory
     {
+        private readonly ProdutoReportParser _produtoReportParser;
+
+        public ProdutoParseFactory(ProdutoReportParser produtoReportParser)
+        {
+            _produtoReportParser = produtoReportParser;
+        }
+        
         public IParser<Produto, IProdutoView> GetProdutoParse()
         {
             return new ProdutoParser();
@@ -13,7 +20,7 @@ namespace UnifesoPoo.Pedido.Api.Controllers.Parsers
 
         public IParser<Produto, IProdutoView> GetProdutoReportParse()
         {
-            return new ProdutoReportParser();
+            return _produtoReportParser;
         }
     }
 }

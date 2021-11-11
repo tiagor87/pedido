@@ -1,10 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using MediatR;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
+using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Events;
+using UnifesoPoo.Pedido.Api.Core.Domain.Shared;
 
 namespace UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities
 {
-    public class Produto
+    public class Produto : IAggregateRoot
     {
+        private ICollection<INotification> _domainEvents;
+
         private Produto()
         {
         }
@@ -13,14 +20,14 @@ namespace UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities
             ExternalId = Guid.NewGuid().ToString();
             Nome = nome;
             Preco = preco;
-            QuantidadeDisponivel = 0;
             Status = "Ativo";
+            _domainEvents = new List<INotification>();
+            RaiseDomainEvent(new ProdutoCriado(this));
         }
 
         public long Id { get; private set; }
         public string ExternalId { get; private set; }
         public string Nome { get; private set; }
-        public int QuantidadeDisponivel { get; private set; }
         public string Status { get; private set; }
         public long Preco { get; private set; }
 
@@ -28,12 +35,26 @@ namespace UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities
         {
             Nome = atualizarProduto.Nome;
             Preco = atualizarProduto.Preco;
-            QuantidadeDisponivel = atualizarProduto.QuantidadeDisponivel;
         }
 
         internal void Deletar()
         {
             Status = "Inativo";
+        }
+
+        private void RaiseDomainEvent(INotification notification)
+        {
+            _domainEvents.Add(notification);
+        }
+
+        public ICollection<INotification> GetDomainEvents()
+        {
+            return _domainEvents.ToImmutableList();
+        }
+
+        public void ClearDomainEvents()
+        {
+            _domainEvents.Clear();
         }
     }
 }
