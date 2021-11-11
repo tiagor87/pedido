@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using UnifesoPoo.Pedido.Api.Controllers.Contracts;
+using UnifesoPoo.Pedido.Api.Controllers.Extensions;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices;
 
 namespace UnifesoPoo.Pedido.Api.Controllers
@@ -19,37 +21,28 @@ namespace UnifesoPoo.Pedido.Api.Controllers
         public IActionResult Add(AdicionarProdutoDto adicionarProdutoDto)
         {
             var produto = _appService.Adicionar(adicionarProdutoDto);
-            return Created(Request.Path, produto);
+            return produto.AsResponse(HttpStatusCode.Created);
         }
 
         [HttpGet]
         public IActionResult Query(string nome)
         {
             var produtos = _appService.Buscar(nome);
-            return Ok(new
-            {
-                data = produtos
-            });
+            return produtos.AsResponse(HttpStatusCode.OK);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(string id)
         {
             var produto = _appService.ObterPeloId(id);
-            return Ok(new
-            {
-                data = produto
-            });
+            return produto.AsResponse(HttpStatusCode.OK);
         }
 
         [HttpPut("{id}")]
         public IActionResult Atualizar(string id, AtualizarProdutoDto atualizarProduto)
         {
             var produto = _appService.Atualizar(id, atualizarProduto);
-            return Ok(new
-            {
-                data = produto
-            });
+            return produto.AsResponse(HttpStatusCode.OK);
         }
 
         [HttpDelete("{id}")]

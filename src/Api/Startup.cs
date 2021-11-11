@@ -1,5 +1,6 @@
 using System.IO;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using UnifesoPoo.Pedido.Api.Controllers.Middlewares;
 using UnifesoPoo.Pedido.Api.Controllers.Parsers;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
@@ -97,6 +100,7 @@ namespace UnifesoPoo.Pedido.Api
 
             app.UseRouting();
 
+            app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 

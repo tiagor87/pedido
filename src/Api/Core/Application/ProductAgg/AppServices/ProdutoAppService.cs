@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Parsers;
 using UnifesoPoo.Pedido.Api.Core.Domain.EstoqueAgg.Entities;
@@ -48,6 +50,12 @@ namespace UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices
         public IProdutoView ObterPeloId(string id)
         {
             var produto = _repositorio.ObterPeloId(id);
+
+            if (produto == null)
+            {
+                throw new NotFoundException(nameof(produto), id);
+            }
+            
             return _parseFactory.GetProdutoParse().Parse(produto);
         }
 
@@ -64,6 +72,14 @@ namespace UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices
             var produto = _repositorio.ObterPeloId(id);
             produto.Deletar();
             _unitOfWork.SaveChanges();
+        }
+    }
+
+    public sealed class NotFoundException : Exception
+    {
+        public NotFoundException(string entityName, string id) : base($"O {entityName} não foi encontrado.")
+        {
+            Data.Add(nameof(id), id);
         }
     }
 }
