@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.Extensions.Logging;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Contracts;
 using UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.Parsers;
 using UnifesoPoo.Pedido.Api.Core.Domain.EstoqueAgg.Entities;
 using UnifesoPoo.Pedido.Api.Core.Domain.EstoqueAgg.Repositories;
 using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Entities;
 using UnifesoPoo.Pedido.Api.Core.Domain.ProductAgg.Repositories;
+using UnifesoPoo.Pedido.Api.Core.Domain.Shared.Exceptions;
 using UnifesoPoo.Pedido.Api.Core.Domain.Shared.Repositories;
 
 namespace UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices
@@ -18,26 +19,34 @@ namespace UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices
         private readonly IProdutoRepositorio _repositorio;
         private readonly IProdutoParseFactory _parseFactory;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<ProdutoAppService> _logger;
 
         public ProdutoAppService(
             IProdutoRepositorio repositorio,
             IProdutoParseFactory parseFactory,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILogger<ProdutoAppService> logger)
         {
             _repositorio = repositorio;
             _parseFactory = parseFactory;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public IProdutoView Adicionar(IAdicionarProduto adicionarProduto)
         {
+            _logger.LogDebug("Criando produto a partir do dto {@dto}", adicionarProduto);
             var produto = new Produto(adicionarProduto.Nome, adicionarProduto.Preco);
-
+            _logger.LogDebug("Produto criado {@produto}", produto);
             _repositorio.Adicionar(produto);
-
+            _logger.LogDebug("Produto adicionado ao repositório {@produto}", produto);
+            _logger.LogDebug("Iniciando gravação do produto {@produto}", produto);
             _unitOfWork.SaveChanges();
-
-            return _parseFactory.GetProdutoParse().Parse(produto);
+            _logger.LogDebug("Produto gravado {@produto}", produto);
+            _logger.LogDebug("Realizando parse do produto {@produto}", produto);
+            var produtoView = _parseFactory.GetProdutoParse().Parse(produto);
+            _logger.LogDebug("Parse realizado {@produto} {@view}", produto, produtoView);
+            return produtoView;
         }
 
         public ICollection<IProdutoView> Buscar(string nome)
@@ -72,14 +81,6 @@ namespace UnifesoPoo.Pedido.Api.Core.Application.ProductAgg.AppServices
             var produto = _repositorio.ObterPeloId(id);
             produto.Deletar();
             _unitOfWork.SaveChanges();
-        }
-    }
-
-    public sealed class NotFoundException : Exception
-    {
-        public NotFoundException(string entityName, string id) : base($"O {entityName} não foi encontrado.")
-        {
-            Data.Add(nameof(id), id);
         }
     }
 }

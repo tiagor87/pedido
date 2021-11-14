@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using UnifesoPoo.Pedido.Api.Controllers.Middlewares;
@@ -38,6 +39,7 @@ namespace UnifesoPoo.Pedido.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging(builder => builder.AddSeq());
             services.AddCors(options =>
             {
                 options.AddPolicy("all", builder =>
@@ -48,7 +50,6 @@ namespace UnifesoPoo.Pedido.Api
                         .AllowAnyOrigin();
                 });
             });
-                
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -83,8 +84,23 @@ namespace UnifesoPoo.Pedido.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, PedidoDbContext dbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, PedidoDbContext dbContext, ILogger<Startup> logger, IHostApplicationLifetime applicationLifetime)
         {
+            applicationLifetime.ApplicationStarted.Register(() =>
+            {
+                logger.LogInformation("Application started");
+            });
+            
+            applicationLifetime.ApplicationStopping.Register(() =>
+            {
+                logger.LogInformation("Application stopping");
+            });
+            
+            applicationLifetime.ApplicationStopped.Register(() =>
+            {
+                logger.LogInformation("Application stopped");
+            });
+            
             if (env.IsDevelopment())
             {
                 dbContext.Database.EnsureCreated();
@@ -101,6 +117,7 @@ namespace UnifesoPoo.Pedido.Api
             app.UseRouting();
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
+            app.UseMiddleware<LoggerHandlingMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
 
